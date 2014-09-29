@@ -1,0 +1,24 @@
+package martini
+
+import (
+	"fmt"
+	// "github.com/drush/logx-go/logx"
+	"net/http"
+	"time"
+	// "log"
+)
+
+func LogxLogger() Handler {
+	return func(res http.ResponseWriter, req *http.Request, c Context, log *log.Logger) {
+		start := time.Now()
+
+		// log.Printf("Started %s %s", req.Method, req.URL.Path)
+		logx.Info(fmt.Sprintf("Started %s %s", req.Method, req.URL.Path), nil)
+
+		rw := res.(ResponseWriter)
+		c.Next()
+
+		//log.Printf("Completed %v %s in %v\n", rw.Status(), http.StatusText(rw.Status()), time.Since(start))
+		logx.Info(fmt.Printf("Completed %v %s in %v\n", rw.Status(), http.StatusText(rw.Status()), time.Since(start)), nil)
+	}
+}
